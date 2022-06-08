@@ -2088,6 +2088,10 @@ variantbam:
   - modules/variantbam/**
   - tests/modules/variantbam/**
 
+vcf2maf:
+  - modules/vcf2maf/**
+  - tests/modules/vcf2maf/**
+
 vcfanno:
   - modules/vcfanno/**
   - tests/modules/vcfanno/**

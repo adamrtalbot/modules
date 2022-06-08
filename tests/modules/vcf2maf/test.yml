@@ -1,0 +1,47 @@
+- name: vcf2maf test_vcf2maf
+  command: nextflow run ./tests/modules/vcf2maf -entry test_vcf2maf -c ./tests/config/nextflow.config  -c ./tests/modules/vcf2maf/nextflow.config
+  tags:
+    - vcf2maf
+  files:
+    - path: output/vcf2maf/test.maf
+      md5sum: 4eedb7743d4aa5c46979e61766aba2b1
+
+- name: vcf2maf test_vcf2maf_tumor_id
+  command: nextflow run ./tests/modules/vcf2maf -entry test_vcf2maf_tumor_id -c ./tests/config/nextflow.config  -c ./tests/modules/vcf2maf/nextflow.config
+  tags:
+    - vcf2maf
+  files:
+    - path: output/vcf2maf/test.maf
+      md5sum: fae4a0079bd96b2003ad42c8c0f88fad
+
+- name: vcf2maf test_vcf2maf_normal_id
+  command: nextflow run ./tests/modules/vcf2maf -entry test_vcf2maf_normal_id -c ./tests/config/nextflow.config  -c ./tests/modules/vcf2maf/nextflow.config
+  tags:
+    - vcf2maf
+  files:
+    - path: output/vcf2maf/test.maf
+      md5sum: 2c0efb4749ca8c3bb7c26b8e5401802e
+
+- name: vcf2maf test_vcf2maf_species
+  command: nextflow run ./tests/modules/vcf2maf -entry test_vcf2maf_species -c ./tests/config/nextflow.config  -c ./tests/modules/vcf2maf/nextflow.config
+  tags:
+    - vcf2maf
+  files:
+    - path: output/vcf2maf/test.maf
+      md5sum: 4eedb7743d4aa5c46979e61766aba2b1
+
+- name: vcf2maf test_vcf2maf_build
+  command: nextflow run ./tests/modules/vcf2maf -entry test_vcf2maf_build -c ./tests/config/nextflow.config  -c ./tests/modules/vcf2maf/nextflow.config
+  tags:
+    - vcf2maf
+  files:
+    - path: output/vcf2maf/test.maf
+      md5sum: c7f357efa774fd5c4003d84f05212ed0
+
+- name: vcf2maf test_vcf2maf_all
+  command: nextflow run ./tests/modules/vcf2maf -entry test_vcf2maf_all -c ./tests/config/nextflow.config  -c ./tests/modules/vcf2maf/nextflow.config
+  tags:
+    - vcf2maf
+  files:
+    - path: output/vcf2maf/test.maf
+      md5sum: bb1a772d7e38258b13d17fbe694fbd5a
