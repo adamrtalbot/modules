@@ -22,29 +22,8 @@ input:
       type: file
       description: |
         vcf to convert to MAF format. Ideally pre-annotated with VEP. Must be uncompressed.
-  - tumor_id:
-      type: value
-      description: |
-        ID of tumor sample in VCF file.
-  - normal_id:
-      type: value
-      description: |
-        ID of normal sample in VCF file.
-  - species:
-      type: value
-      description: |
-        which species to annotate with
-  - ncbi_build:
-      type: value
-      description: |
-        build as per NCBI nomenclature (e.g. GRCh38)
-  - cache_version:
-      type: value
-      description: |
-        Version of VEP cache used to annotate VCF file.
 
 output:
-  #Only when we have meta
   - meta:
       type: map
       description: |
