@@ -4,4 +4,4 @@
     - vcf2maf
   files:
     - path: output/vcf2maf/test.maf
-      md5sum: 4eedb7743d4aa5c46979e61766aba2b1
+      md5sum: fae4a0079bd96b2003ad42c8c0f88fad
