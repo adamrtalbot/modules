@@ -1,0 +1,31 @@
+- name: picard collectinsertsizemetrics test_picard_collectinsertsizemetrics
+  command: nextflow run ./tests/modules/picard/collectinsertsizemetrics -entry test_picard_collectinsertsizemetrics -c ./tests/config/nextflow.config  -c ./tests/modules/picard/collectinsertsizemetrics/nextflow.config
+  tags:
+    - picard
+    - picard/collectinsertsizemetrics
+    - metrics
+    - bam
+    - quality
+  files:
+    - path: output/picard/test.insertsize.pdf
+    - path: output/picard/test.insertsize.txt
+      contains:
+        - "## METRICS CLASS\tpicard.analysis.InsertSizeMetrics"
+        - "MEDIAN_INSERT_SIZE\tMODE_INSERT_SIZE\tMEDIAN_ABSOLUTE_DEVIATION\tMIN_INSERT_SIZE\tMAX_INSERT_SIZE\tMEAN_INSERT_SIZE\tSTANDARD_DEVIATION\tREAD_PAIRS\tPAIR_ORIENTATION\tWIDTH_OF_10_PERCENT\tWIDTH_OF_20_PERCENT\tWIDTH_OF_30_PERCENT\tWIDTH_OF_40_PERCENT\tWIDTH_OF_50_PERCENT\tWIDTH_OF_60_PERCENT\tWIDTH_OF_70_PERCENT\tWIDTH_OF_80_PERCENT\tWIDTH_OF_90_PERCENT\tWIDTH_OF_95_PERCENT\tWIDTH_OF_99_PERCENT\tSAMPLE\tLIBRARY\tREAD_GROUP"
+        - "77\t1"
+
+- name: picard collectinsertsizemetrics test_picard_collectinsertsizemetrics_no_fasta
+  command: nextflow run ./tests/modules/picard/collectinsertsizemetrics -entry test_picard_collectinsertsizemetrics_no_fasta -c ./tests/config/nextflow.config  -c ./tests/modules/picard/collectinsertsizemetrics/nextflow.config
+  tags:
+    - picard
+    - picard/collectinsertsizemetrics
+    - metrics
+    - bam
+    - quality
+  files:
+    - path: output/picard/test.insertsize.pdf
+    - path: output/picard/test.insertsize.txt
+      contains:
+        - "## METRICS CLASS\tpicard.analysis.InsertSizeMetrics"
+        - "MEDIAN_INSERT_SIZE\tMODE_INSERT_SIZE\tMEDIAN_ABSOLUTE_DEVIATION\tMIN_INSERT_SIZE\tMAX_INSERT_SIZE\tMEAN_INSERT_SIZE\tSTANDARD_DEVIATION\tREAD_PAIRS\tPAIR_ORIENTATION\tWIDTH_OF_10_PERCENT\tWIDTH_OF_20_PERCENT\tWIDTH_OF_30_PERCENT\tWIDTH_OF_40_PERCENT\tWIDTH_OF_50_PERCENT\tWIDTH_OF_60_PERCENT\tWIDTH_OF_70_PERCENT\tWIDTH_OF_80_PERCENT\tWIDTH_OF_90_PERCENT\tWIDTH_OF_95_PERCENT\tWIDTH_OF_99_PERCENT\tSAMPLE\tLIBRARY\tREAD_GROUP"
+        - "77\t1"

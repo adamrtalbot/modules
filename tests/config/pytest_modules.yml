@@ -1619,6 +1619,10 @@ picard/collecthsmetrics:
   - modules/picard/collecthsmetrics/**
   - tests/modules/picard/collecthsmetrics/**
 
+picard/collectinsertsizemetrics:
+  - modules/picard/collectinsertsizemetrics/**
+  - tests/modules/picard/collectinsertsizemetrics/**
+
 picard/collectmultiplemetrics:
   - modules/picard/collectmultiplemetrics/**
   - tests/modules/picard/collectmultiplemetrics/**
