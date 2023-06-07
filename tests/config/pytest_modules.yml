@@ -580,6 +580,10 @@ bwa/mem:
   - modules/nf-core/bwa/mem/**
   - tests/modules/nf-core/bwa/mem/**
 
+bwa/realign:
+  - modules/nf-core/bwa/realign/**
+  - tests/modules/nf-core/bwa/realign/**
+
 bwa/sampe:
   - modules/nf-core/bwa/sampe/**
   - tests/modules/nf-core/bwa/sampe/**
