@@ -40,4 +40,6 @@ output:
       pattern: "versions.yml"
 
 authors:
+  - "@adamrtalbot"
   - "@marrip"
+  - "@priesgo"
