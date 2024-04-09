@@ -1,0 +1,38 @@
+name: nf-core-lint
+description: "Lint nf-core modules and workflows"
+inputs:
+  component_type:
+    description: "The type of component to lint, e.g. 'module' or 'subworkflow'"
+    required: true
+  components:
+    description: "List of components to lint"
+    required: true
+runs:
+  using: "composite"
+  steps:
+    - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
+
+    - name: Set up Python
+      uses: actions/setup-python@0a5c61591373683505ea898e09a3ea4f39ef2b9c # v5
+      with:
+        python-version: "3.11"
+
+    - name: Install pip
+      shell: bash
+      run: python -m pip install --upgrade pip
+
+    - uses: actions/setup-java@99b8673ff64fbf99d8d325f52d9a5bdedb8483e9 # v4
+      with:
+        distribution: "temurin"
+        java-version: "17"
+
+    - name: Setup Nextflow
+      uses: nf-core/setup-nextflow@v2
+
+    - name: Install nf-core tools development version
+      shell: bash
+      run: python -m pip install --upgrade --force-reinstall git+https://github.com/nf-core/tools.git@dev
+
+    - name: Lint ${{inputs.component_type}} ${{ inputs.tags }}
+      shell: bash
+      run: nf-core ${{inputs.component_type}}s lint ${{ inputs.tags }}

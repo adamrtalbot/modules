@@ -7,10 +7,9 @@ import argparse
 import json
 import logging
 import re
-import yaml
-
-from itertools import chain
 from pathlib import Path
+
+import yaml
 from git import Repo
 
 
@@ -88,7 +87,7 @@ def read_yaml_inverted(file_path: str) -> dict:
     Returns:
         dict: The contents of the YAML file as a dictionary inverted.
     """
-    with open(file_path, "r") as f:
+    with open(file_path) as f:
         data = yaml.safe_load(f)
 
     # Invert dictionary of lists into contents of lists are keys, values are the original keys
@@ -116,6 +115,7 @@ def find_changed_files(
     repo = Repo(".")
     # identify commit on branch1
     branch1_commit = repo.commit(branch1)
+    # Get the diff between two branches
     # identify commit on branch2
     branch2_commit = repo.commit(branch2)
     # compare two branches
@@ -136,9 +136,7 @@ def find_changed_files(
     return list(set(changed_files))
 
 
-def detect_include_files(
-    changed_files: list[Path], include_files: dict[str, str]
-) -> list[Path]:
+def detect_include_files(changed_files: list[Path], include_files: dict[str, str]) -> list[Path]:
     """
     Detects the include files based on the changed files.
 
@@ -197,10 +195,9 @@ def process_files(files: list[Path]) -> list[str]:
     """
     result = []
     for file in files:
-        with open(file, "r") as f:
+        with open(file) as f:
             is_pipeline_test = True
-            lines = f.readlines()
-            for line in lines:
+            for line in f:
                 line = line.strip()
                 if line.startswith(("workflow", "process", "function")):
                     words = line.split()
@@ -229,16 +226,18 @@ def convert_nf_test_files_to_test_types(
     Returns:
         dict: Dictionary with function, process and workflow lists.
     """
-    # Populate empty dict from types
     result: dict[str, list[str]] = {key: [] for key in types}
 
     for line in lines:
         words = line.split()
-        if len(words) == 2 and re.match(r'^".*"$', words[1]):
-            keyword = words[0]
-            name = words[1].strip("'\"")  # Strip both single and double quotes
+                if len(words) == 2 and re.match(
+                    r"^(workflow|process|function|pipeline|tag)$", words[1]
+                ):
+                result.append(line)
+                is_pipeline_test = False
             if keyword in types:
                 result[keyword].append(name)
+
     return result
 
 
@@ -260,28 +259,23 @@ def find_changed_dependencies(paths: list[Path], tags: list[str]) -> list[Path]:
 
     # find nf-test files with changed dependencies
     for nf_test_file in nf_test_files:
-        with open(nf_test_file, "r") as f:
+        with open(nf_test_file) as f:
             lines = f.readlines()
             # Get all tags from nf-test file
             # Make case insensitive with .casefold()
             tags_in_nf_test_file = [
                 tag.casefold().replace("/", "_")
-                for tag in convert_nf_test_files_to_test_types(lines, types=["tag"])[
-                    "tag"
-                ]
+                for tag in convert_nf_test_files_to_test_types(lines, types=["tag"])["tag"]
             ]
             # Check if tag in nf-test file appears in a tag.
             # Use .casefold() to be case insensitive
-            if any(
-                tag.casefold().replace("/", "_") in tags_in_nf_test_file for tag in tags
-            ):
+            if any(tag.casefold().replace("/", "_") in tags_in_nf_test_file for tag in tags):
                 result.append(nf_test_file)
 
     return result
 
 
 if __name__ == "__main__":
-
     # Utility stuff
     args = parse_args()
     logging.basicConfig(level=args.log_level)
@@ -292,27 +286,20 @@ if __name__ == "__main__":
     # If an additional include YAML is added, we detect additional changed dirs to include
     if args.include:
         include_files = read_yaml_inverted(args.include)
-        changed_files = changed_files + detect_include_files(
-            changed_files, include_files
-        )
+        changed_files = changed_files + detect_include_files(changed_files, include_files)
     nf_test_files = detect_nf_test_files(changed_files)
     lines = process_files(nf_test_files)
-    result = convert_nf_test_files_to_test_types(lines)
+    result = convert_nf_test_files_to_test_types(lines, args.types)  # Get only relevant results (specified by -t)
 
-    # Get only relevant results (specified by -t)
     # Unique using a set
-    target_results = list(
-        {item for sublist in map(result.get, args.types) for item in sublist}
-    )
+    target_results = list({item for sublist in result[args.types] for item in sublist})
 
     # Parse files to identify nf-tests with changed dependencies
     changed_dep_files = find_changed_dependencies([Path(".")], target_results)
 
     # Combine target nf-test files and nf-test files with changed dependencies
     # Go back one dir so we get the module or subworkflow path
-    all_nf_tests = [
-        str(test_path.parent.parent) for test_path in set(changed_dep_files + nf_test_files)
-    ]
+    all_nf_tests = [str(test_path.parent.parent) for test_path in set(changed_dep_files + nf_test_files)]
 
     # Print to stdout
     print(json.dumps(all_nf_tests))
