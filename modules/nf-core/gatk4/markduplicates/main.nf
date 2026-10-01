@@ -4,8 +4,8 @@ process GATK4_MARKDUPLICATES {
 
     conda "${moduleDir}/environment.yml"
     container "${workflow.containerEngine in ['singularity', 'apptainer'] && !task.ext.singularity_pull_docker_container
-        ? 'https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/31/31fdfdf5051390abfeb953785a2e58ad3b1cf7a9db28356ba669b0ac111beb98/data'
-        : 'community.wave.seqera.io/library/gatk4-main_samtools:b3f371e58c661f7c'}"
+        ? 'https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/6c/6c046d4fcf66ffc5a9284d0326246c0d49c73980b395ee7505a80da5b632ee3d/data'
+        : 'community.wave.seqera.io/library/gatk4-lite_samtools:e0a8a1d972aca91e'}"
 
     input:
     tuple val(meta), path(bam)
