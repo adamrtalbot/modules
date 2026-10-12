@@ -22,7 +22,6 @@ COPY universc.patch /tmp/
 RUN wget -qO- https://github.com/minoda-lab/universc/archive/refs/tags/${UNIVERSC_VER}.tar.gz | tar -xz -C /opt \
     && mv /opt/universc-${UNIVERSC_VER} /opt/universc \
     && rm -rf /opt/universc/test \
-    && patch -l -d /opt/universc -p1 < /tmp/universc.patch \
-    && ln -s launch_universc.sh /opt/universc/universc
+    && patch -l -d /opt/universc -p1 < /tmp/universc.patch
 
 ENV PATH="/opt/cellranger-${CELLRANGER_VER}:/opt/universc:/opt/env/bin:${PATH}"

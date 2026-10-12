@@ -14,7 +14,7 @@ process UNIVERSC {
     output:
     tuple val(meta), path("${prefix}/outs/*"), emit: outs
     tuple val("${task.process}"), val('cellranger'), eval("cellranger --version | sed 's/cellranger //'"), emit: versions_cellranger, topic: versions
-    tuple val("${task.process}"), val('universc'), eval("sed -n 's/^universcversion=\"\\(.*\\)\"/\\1/p' \$(which universc)"), emit: versions_universc, topic: versions
+    tuple val("${task.process}"), val('universc'), eval("sed -n 's/^universcversion=\"\\(.*\\)\"/\\1/p' \$(which launch_universc.sh)"), emit: versions_universc, topic: versions
 
     when:
     task.ext.when == null || task.ext.when
@@ -32,20 +32,16 @@ process UNIVERSC {
     """
     # UniverSC edits its own and Cell Ranger's install directories, so run from task-local copies
     cr=\$(dirname \$(which cellranger))
-    mkdir .cellranger
-    ln -s \$cr/* .cellranger/
-    rm -f .cellranger/{lib,mro,cellranger-cs}
-    mkdir .cellranger/{lib,mro}
-    ln -s \$cr/lib/* .cellranger/lib/
-    ln -s \$cr/mro/* .cellranger/mro/
-    rm .cellranger/lib/python .cellranger/mro/rna
+    mkdir -p .cellranger/lib .cellranger/mro
     cp -r \$cr/lib/python .cellranger/lib/
     cp -r \$cr/mro/rna .cellranger/mro/
-    cp -r \$(dirname \$(readlink -f \$(which universc))) .universc
+    printf '#!/bin/sh\\nexec %s/cellranger "\$@"\\n' \$cr > .cellranger/cellranger
+    chmod +x .cellranger/cellranger
+    cp -r \$(dirname \$(which launch_universc.sh)) .universc
     export PATH="\$PWD/.cellranger:\$PWD/.universc:\$PATH"
 
     export PYTHON_EGG_CACHE=\$(pwd)/.cache
-    universc \\
+    launch_universc.sh \\
         --id ${prefix} \\
         ${input_reads} \\
         --technology ${technology} \\
